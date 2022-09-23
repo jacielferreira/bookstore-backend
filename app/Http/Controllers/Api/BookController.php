@@ -3,19 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\Api\BookService;
+use App\Interfaces\BookRepositoryInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
     public function __construct(
-        private BookService $bookService
+        private BookRepositoryInterface $bookRepository
     )
     {}
 
-    public function index()
+    public function index(): JsonResponse
     {
-        return $this->bookService->getBooks();
+        return response()->json(['data' => $this->bookRepository->getBooks()]);
     }
 
     public function create(Request $request)
@@ -23,9 +24,10 @@ class BookController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        return $this->bookService->addBook($request->all());
+        $book = $request->all();
+        return response()->json(['data' => $this->bookRepository->addBooks($book)]);
     }
 
     public function show($id)

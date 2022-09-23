@@ -3,17 +3,24 @@
 namespace App\Services\Api;
 
 use App\Models\Book;
+use App\Repositories\BookRepository;
+use Illuminate\Http\Request;
 
 class BookService
 {
-    public function addBook($book)
+    public function __construct(
+        protected BookRepository $bookRepository
+    )
+    {}
+
+    public function addBook(Request $request)
     {
-        $book = Book::create($book);
-        return response()->json(['message'=>'Book created!', "data" => $book], 200);
+        $attributes = $request->all();
+        $this->bookRepository->addBook($attributes);
     }
 
-    public function getBooks(array $params = [])
+    public function getBooks()
     {
-        return Book::all();
+        $this->bookRepository->getBooks();
     }
 }
