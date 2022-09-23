@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
+
     public function __construct(
-        private BookRepositoryInterface $bookRepository
+       private BookRepositoryInterface $bookRepository
     )
     {}
 
@@ -19,35 +20,23 @@ class BookController extends Controller
         return response()->json(['data' => $this->bookRepository->getBooks()]);
     }
 
-    public function create(Request $request)
-    {
-        //
-    }
-
     public function store(Request $request): JsonResponse
     {
-        $book = $request->all();
-        return response()->json(['data' => $this->bookRepository->addBooks($book)]);
+        return response()->json(['data' => $this->bookRepository->addBooks($request->all())]);
     }
 
-    public function show($id)
+    public function show($isbnBook)
     {
-        //
+        return response()->json(['data' => $this->bookRepository->getBookByIsbn($isbnBook)]);
     }
 
-    public function edit($id)
+    public function update(Request $request, $bookId)
     {
-        //
+        return response()->json(['data' => $this->bookRepository->updateBook($bookId, $request->all())]);
     }
 
-    public function update(Request $request, $id)
+    public function destroy($bookId)
     {
-        //
-    }
-
-
-    public function destroy($id)
-    {
-        //
+        return response()->json(['data' => $this->bookRepository->deleteBook($bookId)]);
     }
 }

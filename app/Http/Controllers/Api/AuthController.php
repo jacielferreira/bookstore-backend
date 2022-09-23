@@ -5,27 +5,30 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserRequest;
+use App\Interfaces\UserRepositoryInterface;
 use App\Services\Api\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+
     public function __construct(
-        private UserService $userService
+        private UserRepositoryInterface $userRepository
     )
     {}
 
-    public function registerUser(UserRequest $userRequest)
+    public function registerUser(UserRequest $userRequest): JsonResponse
     {
         try{
-            $user = $this->userService->create([
-                'name' => $userRequest->name,
-                'email' => $userRequest->email,
-                'password' => Hash::make($userRequest->password)
+            $user = $userRequest->only([
+                'name',
+                'email',
+                'password'
             ]);
-            response()->json(["message"=> "User created successfully", "data" => $user], 200);
+            return response()->json(["message"=> "User created successfully", "data" => $this->userRepository->createUser($user)], 200);
         }
         catch (\Throwable $th){
             return response()->json(["message" => $th->getMessage()], 500);

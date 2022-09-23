@@ -2,23 +2,23 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 
-class UserRepository
+class UserRepository implements UserRepositoryInterface
 {
     public function __construct(
         protected User $user
     )
     {}
 
-    public function create(array $attributes)
+    public function createUser(array $user)
     {
-        $this->user->insert($attributes);
+       $this->user->create($user);
     }
 
-    public function getUserByEmail(array $attributes)
+    public function getUserByEmail(string $email)
     {
-        $this->user->where('email', $attributes['email'])->first();
+        $this->user->where('email', $email)->firstOrFail();
     }
-
 }
