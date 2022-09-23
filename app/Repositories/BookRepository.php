@@ -24,16 +24,16 @@ class BookRepository implements BookRepositoryInterface
 
     public function deleteBook($bookId)
     {
-        $this->book->destroy($bookId);
+        return $this->book->destroy($bookId);
     }
 
     public function updateBook($bookId, array $newDetail)
     {
-        $this->book->whereId($bookId)->update($newDetail);
+        return $this->book->whereId($bookId)->update($newDetail);
     }
 
     public function getBookByIsbn($isbnBook)
     {
-        $this->book->where('isbn', $isbnBook)->get();
+        return $this->book->where('isbn', $isbnBook)->get();
     }
 }

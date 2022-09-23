@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Interfaces\BookRepositoryInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class BookController extends Controller
 {
@@ -22,7 +24,7 @@ class BookController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        return response()->json(['data' => $this->bookRepository->addBooks($request->all())]);
+        return response()->json(['data' => $this->bookRepository->addBooks($request->all())],  ResponseAlias::HTTP_CREATED);
     }
 
     public function show($isbnBook)

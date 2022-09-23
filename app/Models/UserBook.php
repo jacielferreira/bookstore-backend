@@ -5,16 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Book extends Model
+class UserBook extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'isbn', 'name', 'value'
+        'user_id',
+        'book_id'
     ];
-
-    public function userBook()
-    {
-        return $this->hasOne(UserBook::class);
-    }
 }

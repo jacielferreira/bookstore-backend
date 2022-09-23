@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserRequest;
 use App\Interfaces\UserRepositoryInterface;
-use App\Services\Api\UserService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\PersonalAccessToken;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class AuthController extends Controller
 {
@@ -28,7 +28,12 @@ class AuthController extends Controller
                 'email',
                 'password'
             ]);
-            return response()->json(["message"=> "User created successfully", "data" => $this->userRepository->createUser($user)], 200);
+            return response()->json(["message"=> "User created successfully", "data" =>
+                $this->userRepository->createUser([
+                    'name' => $user['name'],
+                    'email' => $user['email'],
+                    'password' => Hash::make($user['password'])
+                ])], ResponseAlias::HTTP_CREATED);
         }
         catch (\Throwable $th){
             return response()->json(["message" => $th->getMessage()], 500);
@@ -41,14 +46,18 @@ class AuthController extends Controller
             if(!Auth::attempt($loginRequest->only(['email', 'password']))){
                 return response()->json(["message" => 'Email & Password does not match.'], 401);
             }
-
-            $user = $this->userService->getUserByEmail($loginRequest->email);
+            $user = $this->userRepository->getUserByEmail($loginRequest->email);
             return response()->json(["message"=> "User logged in successfully", "token" => $user->createToken('API TOKEN')
                 ->plainTextToken], 200);
-
         }
         catch (\Throwable $th){
             return response()->json(["message" => $th->getMessage()], 500);
         }
+    }
+
+    public function logoutUser(LoginRequest $loginRequest)
+    {
+        $this->userRepository->logoutUser($loginRequest);
+        return response()->json(["message"=> "User logged out successfully"], 200);
     }
 }
