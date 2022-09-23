@@ -3,12 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\{
-    BookController
+    BookController,
+    AuthController
 };
 
-Route::get('/', function (){
-    return response()->json(["message"=>"Book Backend running."]);
-});
+Route::post('/auth/register', [AuthController::class, 'registerUser']);
+Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
 Route::apiResource('books', BookController::class);
 
