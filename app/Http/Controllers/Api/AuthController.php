@@ -41,7 +41,7 @@ class AuthController extends Controller
             }
 
             $user = $this->userService->getUserByEmail($loginRequest->email);
-            response()->json(["message"=> "User logged in successfully", "token" => $user->createToken('API TOKEN')
+            return response()->json(["message"=> "User logged in successfully", "token" => $user->createToken('API TOKEN')
                 ->plainTextToken], 200);
 
         }
