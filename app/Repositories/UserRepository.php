@@ -59,11 +59,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function logoutUser($request)
     {
-        Auth::attempt([
-            'email' => $request['email'],
-            'password' => $request['password']
-        ]);
-        Auth::user()->tokens()->delete();
+        auth('sanctum')->user()->tokens()->delete();
         return response(['message'=>'Successfully Logging out']);
     }
 }
