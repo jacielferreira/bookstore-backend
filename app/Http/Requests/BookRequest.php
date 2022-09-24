@@ -11,15 +11,15 @@ use Illuminate\Validation\Rule;
 class BookRequest extends FormRequest
 {
 
-    public function rules(Request $request)
+    public function rules()
     {
         return [
             'name' => 'required',
             'isbn' => [
                 'required', 'numeric',
-                 Rule::unique('books', 'isbn')->ignore($request->isbn)
+                 Rule::unique('books', 'isbn')->ignore($this->book)
             ],
-            'value' => 'required|numeric|between:0,99.99'
+            'value' => 'required|numeric|between:0,9999.99'
         ];
     }
 

@@ -27,8 +27,11 @@ class UserRepository implements UserRepositoryInterface
 
     public function logoutUser($request)
     {
-        $accessToken = $request->bearerToken();
-        $token = PersonalAccessToken::findToken($accessToken);
-        $token->delete();
+        Auth::attempt([
+            'email' => $request['email'],
+            'password' => $request['password']
+        ]);
+        Auth::user()->tokens()->delete();
+        return response(['message'=>'Successfully Logging out']);
     }
 }
