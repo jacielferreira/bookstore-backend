@@ -2,47 +2,45 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Contracts\Validation\Validator;
 
 class UserRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules(Request $request)
     {
         return [
             'name' => 'required|string',
             'email' => [
-                'required',
-                'email',
+                'required', 'email',
                 Rule::unique('users', 'email')->ignore($request->email)
-            ]
+            ],
         ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => "Validation errors",
+            'data' => $validator->errors()
+        ]));
     }
 
     public function messages()
     {
-       return [
-           'name.required' => 'This field is required.',
-           'name.string' => 'This field not permitted numbers.',
-           'email.required' => 'This field is required',
-           'email.email' => 'This email is invalid.',
-           'email.unique' => 'This email has already been registered in the system.',
-       ];
+        return [
+            'name.rqueired' => 'Name is required',
+            'name.string' => 'Name is string only',
+            'email.required' => 'Email is required',
+            'email.email' => 'This Email is invalid',
+            'email.unique' => 'This Email already registered '
+        ];
     }
+
+
 }

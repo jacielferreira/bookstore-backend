@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserRequest;
 use App\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -55,9 +56,9 @@ class AuthController extends Controller
         }
     }
 
-    public function logoutUser(LoginRequest $loginRequest)
+    public function logoutUser(Request $request)
     {
-        $this->userRepository->logoutUser($loginRequest);
+        $this->userRepository->logoutUser($request);
         return response()->json(["message"=> "User logged out successfully"], 200);
     }
 }
