@@ -41,9 +41,9 @@ class UserRepository implements UserRepositoryInterface
     {
         try{
             if(!Auth::attempt($request->only(['email', 'password']))){
-                return response()->json(["message" => 'Email & Password does not match.'], 401);
+                return response()->json(["message" => 'Email & Password does not match.'], ResponseAlias::HTTP_UNAUTHORIZED);
             }
-            $user = $this->getUserByEmail($request['email']);
+            $user = auth('sanctum')->user();
             return response()->json(["message"=> "User logged in successfully", "token" => $user->createToken('API TOKEN')
                 ->plainTextToken], ResponseAlias::HTTP_CREATED);
         }
