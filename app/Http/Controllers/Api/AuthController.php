@@ -23,37 +23,12 @@ class AuthController extends Controller
 
     public function registerUser(UserRequest $userRequest): JsonResponse
     {
-        try{
-            $user = $userRequest->only([
-                'name',
-                'email',
-                'password'
-            ]);
-            return response()->json(["message"=> "User created successfully", "data" =>
-                $this->userRepository->createUser([
-                    'name' => $user['name'],
-                    'email' => $user['email'],
-                    'password' => Hash::make($user['password'])
-                ])], ResponseAlias::HTTP_CREATED);
-        }
-        catch (\Throwable $th){
-            return response()->json(["message" => $th->getMessage()], 500);
-        }
+        return $this->userRepository->registerUser($userRequest);
     }
 
     public function loginUser(LoginRequest $loginRequest)
     {
-        try{
-            if(!Auth::attempt($loginRequest->only(['email', 'password']))){
-                return response()->json(["message" => 'Email & Password does not match.'], 401);
-            }
-            $user = $this->userRepository->getUserByEmail($loginRequest->email);
-            return response()->json(["message"=> "User logged in successfully", "token" => $user->createToken('API TOKEN')
-                ->plainTextToken], 200);
-        }
-        catch (\Throwable $th){
-            return response()->json(["message" => $th->getMessage()], 500);
-        }
+        return $this->userRepository->loginUser($loginRequest);
     }
 
     public function logoutUser(LoginRequest $loginRequest)
