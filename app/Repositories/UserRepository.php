@@ -4,11 +4,10 @@ namespace App\Repositories;
 
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
-use http\Env\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -30,10 +29,10 @@ class UserRepository implements UserRepositoryInterface
                     'name' => $user['name'],
                     'email' => $user['email'],
                     'password' => Hash::make($user['password'])
-                ])], ResponseAlias::HTTP_CREATED);
+                ])], Response::HTTP_CREATED);
         }
         catch (\Throwable $th){
-            return response()->json(["message" => $th->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(["message" => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -41,14 +40,14 @@ class UserRepository implements UserRepositoryInterface
     {
         try{
             if(!Auth::attempt($request->only(['email', 'password']))){
-                return response()->json(["message" => 'Email & Password does not match.'], ResponseAlias::HTTP_UNAUTHORIZED);
+                return response()->json(["message" => 'Email & Password does not match.'], Response::HTTP_UNAUTHORIZED);
             }
             $user = auth('sanctum')->user();
             return response()->json(["message"=> "User logged in successfully", "token" => $user->createToken('API TOKEN')
-                ->plainTextToken], ResponseAlias::HTTP_CREATED);
+                ->plainTextToken], Response::HTTP_CREATED);
         }
         catch (\Throwable $th){
-            return response()->json(["message" => $th->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(["message" => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

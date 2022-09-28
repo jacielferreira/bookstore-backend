@@ -44,5 +44,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function userBook()
+    {
+        return $this->hasOne(UserBook::class);
+    }
+
+    public function userBooks()
+    {
+        return $this->hasMany(UserBook::class);
+    }
+
 
 }
