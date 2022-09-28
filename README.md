@@ -38,3 +38,42 @@ $ php artisan serve
 
 
 ```
+
+## API Endpoints
+#### Register User
+```http
+POST /api/auth/register
+```
+#### Login
+```http
+POST /api/auth/login
+```
+#### Logot
+```http
+POST /api/auth/logout
+```
+#### Create Book
+```http
+POST /api/books
+```
+#### Show Books
+```http
+GET /api/books
+```
+#### Restore Book by ID
+```http
+POST /api/books/restore/{book_id}
+```
+#### Delete Book by ID
+```http
+DELETE /api/books/delete/{book_id}
+```
+#### Force delete Book by ID
+```http
+DELETE /api/books/force-delete/{book_id}
+```
+#### Search
+```http
+GET /api/books/search/{query}
+```
+
