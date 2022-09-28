@@ -4,6 +4,7 @@
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
+* [API Endpoints](#api-endpoints)
 
 ## General info
 This backend project was developed using Laravel 9. I used Laravel in the backend with Mysql or SQLITE in the database, we can be changed by any other without problems.
