@@ -49,6 +49,10 @@ POST /api/auth/register
 ```http
 POST /api/auth/login
 ```
+#### Show User
+```http
+GET /api/auth/me
+```
 #### Logot
 ```http
 POST /api/auth/logout
