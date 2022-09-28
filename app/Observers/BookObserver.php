@@ -26,21 +26,25 @@ class BookObserver
 
     public function deleted(Book $book)
     {
+        $book->deleted_by = auth('sanctum')->user()->id;
+        $book->save();
+        $book->userBook->deleted_by = auth('sanctum')->user()->id;
+        $book->userBook->save();
         $book->userBook->delete();
     }
 
     public function restoring(Book $book)
     {
-        $book->temp_deleted_at = $book->deleted_at;
-    }
-
-    public function restored(Book $book)
-    {
         $book->userBook()
-            ->onlyTrashed()->where('deleted_at', '>=', $book->temp_deleted_at)
+            ->withTrashed()
             ->get()
             ->each(function ($userBook){
                 $userBook->restore();
             });
+    }
+
+    public function restored(Book $book)
+    {
+        //
     }
 }

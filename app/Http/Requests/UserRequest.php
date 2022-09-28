@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class UserRequest extends FormRequest
             'success' => false,
             'message' => "Validation errors",
             'data' => $validator->errors()
-        ]));
+        ], Response::HTTP_UNPROCESSABLE_ENTITY));
     }
 
     public function messages()

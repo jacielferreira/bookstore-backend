@@ -40,13 +40,20 @@ class BookRepository implements BookRepositoryInterface
             return response()->json(["message"=> "Book deleted successfully"], Response::HTTP_FOUND);
         }
         catch (\Throwable $th){
-            return response()->json(["message" => $th->getMessage()], Response::HTTP_NOT_FOUND);
+            return response()->json(["message" => $th->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
 
     public function forceDelete($bookId)
     {
-
+        try{
+            $book = $this->book->whereId($bookId)->first();
+            $book->forceDelete();
+            return response()->json(["message"=> "Book removed successfully"], Response::HTTP_CREATED);
+        }
+        catch (\Throwable $th){
+            return response()->json(["message" => $th->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
     }
 
     public function destroyBook($bookId)
@@ -57,7 +64,7 @@ class BookRepository implements BookRepositoryInterface
             return response()->json(["message"=> "Book removed successfully"], Response::HTTP_CREATED);
         }
         catch (\Throwable $th){
-            return response()->json(["message" => $th->getMessage()], Response::HTTP_NOT_FOUND);
+            return response()->json(["message" => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -69,7 +76,7 @@ class BookRepository implements BookRepositoryInterface
             return response()->json(["message"=> "Book edited successfully"], Response::HTTP_CREATED);
         }
         catch (\Throwable $th){
-            return response()->json(["message" => $th->getMessage()], Response::HTTP_NOT_FOUND);
+            return response()->json(["message" => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -90,11 +97,13 @@ class BookRepository implements BookRepositoryInterface
     public function restoreBook($bookId)
     {
         try{
-            $this->book->withTrashed()->where('id', $bookId)->restore();
+
+            $book = $this->book->withTrashed()->where('id', $bookId)->first();
+            $book->restore();
             return response()->json(["message"=> "Book restored successfully"], Response::HTTP_CREATED);
         }
         catch (\Throwable $th){
-            return response()->json(["message" => $th->getMessage()], Response::HTTP_NOT_FOUND);
+            return response()->json(["message" => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

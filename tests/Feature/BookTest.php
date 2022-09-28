@@ -70,6 +70,9 @@ class BookTest extends TestCase
             ->assertStatus(201);
         $response = $this->call('GET', '/api/books/123456789');
         $this->assertEquals(201, $response->getStatusCode());
+        $this->get(route('books.index'))
+            ->dump()
+            ->assertStatus(201);
     }
 
     public function test_update_book()
@@ -92,5 +95,7 @@ class BookTest extends TestCase
             ->dump()
             ->assertStatus(201);
     }
+
+
 
 }

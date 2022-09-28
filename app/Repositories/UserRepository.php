@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\User\UserResource;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UserRepository implements UserRepositoryInterface
 {
     public function __construct(
-        protected User $user
+        private User $user
     )
     {}
 
@@ -60,5 +61,17 @@ class UserRepository implements UserRepositoryInterface
     {
         auth('sanctum')->user()->tokens()->delete();
         return response(['message'=>'Successfully Logging out']);
+    }
+
+    public function me()
+    {
+        try{
+            $user = auth('sanctum')->user();
+            $userResource = new UserResource($user);
+            return response()->json($userResource, Response::HTTP_CREATED);
+        }
+        catch (\Throwable $th){
+
+        }
     }
 }

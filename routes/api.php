@@ -7,9 +7,11 @@ use App\Http\Controllers\Api\{
     AuthController
 };
 
-Route::post('/auth/register', [AuthController::class, 'registerUser']);
-Route::post('/auth/login', [AuthController::class, 'loginUser']);
-Route::post('/auth/logout', [AuthController::class, 'logoutUser']);
+
+Route::post('/auth/register', [AuthController::class, 'registerUser'])->name('auth.register');
+Route::post('/auth/login', [AuthController::class, 'loginUser'])->name('auth.login');
+Route::post('/auth/logout', [AuthController::class, 'logoutUser'])->name('auth.logout');
+Route::get('/auth/me', [AuthController::class, 'me'])->name('auth.me');
 
 Route::middleware('sanctum')->prefix('books')->group(function(){
     Route::get('/', [BookController::class, 'index'])->name('books.index');

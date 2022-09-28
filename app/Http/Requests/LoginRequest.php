@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 class LoginRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class LoginRequest extends FormRequest
             'success' => false,
             'message' => "Validation errors",
             'data' => $validator->errors()
-        ]));
+        ], Response::HTTP_UNPROCESSABLE_ENTITY));
     }
 
     public function messages()
