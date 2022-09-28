@@ -61,6 +61,10 @@ POST /api/books
 ```http
 GET /api/books
 ```
+#### Update Books
+```http
+POST /api/books/{book_id}
+```
 #### Restore Book by ID
 ```http
 POST /api/books/restore/{book_id}
