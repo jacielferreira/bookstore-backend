@@ -5,11 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookRequest;
 use App\Interfaces\BookRepositoryInterface;
-use App\Models\Book;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class BookController extends Controller
 {
@@ -34,6 +31,11 @@ class BookController extends Controller
         return $this->bookRepository->getBookByIsbn($isbnBook);
     }
 
+    public function search($query)
+    {
+        return $this->bookRepository->searchBook($query);
+    }
+
     public function update(BookRequest $bookRequest, $bookId)
     {
         return $this->bookRepository->updateBook($bookId, $bookRequest->all());
@@ -49,8 +51,14 @@ class BookController extends Controller
         return $this->bookRepository->forceDelete($bookId);
     }
 
-    public function destroy($bookId)
+    public function delete($bookId)
     {
         return $this->bookRepository->deleteBook($bookId);
     }
+
+    public function destroy($bookId)
+    {
+        return $this->bookRepository->destroyBook($bookId);
+    }
+
 }

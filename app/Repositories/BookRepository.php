@@ -37,7 +37,7 @@ class BookRepository implements BookRepositoryInterface
         try{
             $book = $this->book->whereId($bookId)->first();
             $book->delete();
-            return response()->json(["message"=> "Book deleted successfully"], Response::HTTP_CREATED);
+            return response()->json(["message"=> "Book deleted successfully"], Response::HTTP_FOUND);
         }
         catch (\Throwable $th){
             return response()->json(["message" => $th->getMessage()], Response::HTTP_NOT_FOUND);
@@ -47,6 +47,18 @@ class BookRepository implements BookRepositoryInterface
     public function forceDelete($bookId)
     {
 
+    }
+
+    public function destroyBook($bookId)
+    {
+        try{
+            $book = $this->book->whereId($bookId)->first();
+            $book->destroy($bookId);
+            return response()->json(["message"=> "Book removed successfully"], Response::HTTP_CREATED);
+        }
+        catch (\Throwable $th){
+            return response()->json(["message" => $th->getMessage()], Response::HTTP_NOT_FOUND);
+        }
     }
 
     public function updateBook($bookId, array $newDetail)
@@ -64,7 +76,15 @@ class BookRepository implements BookRepositoryInterface
     public function getBookByIsbn($isbnBook)
     {
         $books = $this->book->where('isbn', $isbnBook)->paginate(15);
-        return \response()->json(BookResource::collection($books)->response()->getData(true), Response::HTTP_CREATED);
+        return response()->json(BookResource::collection($books)
+            ->response()->getData(true), Response::HTTP_CREATED);
+    }
+
+    public function searchBook($bookName)
+    {
+        $books = $this->book->where('name', 'like', '%'. $bookName . '%')->paginate(15);
+        return response()->json(BookResource::collection($books)
+            ->response()->getData(true), Response::HTTP_CREATED);
     }
 
     public function restoreBook($bookId)
@@ -77,4 +97,6 @@ class BookRepository implements BookRepositoryInterface
             return response()->json(["message" => $th->getMessage()], Response::HTTP_NOT_FOUND);
         }
     }
+
+
 }
