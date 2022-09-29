@@ -27,9 +27,9 @@ class BookObserver
     public function deleted(Book $book)
     {
         $book->deleted_by = auth('sanctum')->user()->id;
-        $book->save();
+        $book->update();
         $book->userBook->deleted_by = auth('sanctum')->user()->id;
-        $book->userBook->save();
+        $book->userBook->update();
         $book->userBook->delete();
     }
 
