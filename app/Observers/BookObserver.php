@@ -45,6 +45,9 @@ class BookObserver
 
     public function restored(Book $book)
     {
-        //
+        $book->deleted_by = null;
+        $book->userBook->deleted_by = null;
+        $book->userBook->update();
+        $book->update();
     }
 }

@@ -65,13 +65,8 @@ class UserRepository implements UserRepositoryInterface
 
     public function me()
     {
-        try{
-            $user = auth('sanctum')->user();
-            $userResource = new UserResource($user);
-            return response()->json($userResource, Response::HTTP_CREATED);
-        }
-        catch (\Throwable $th){
-
-        }
+        $user = auth('sanctum')->user();
+        $userResource = new UserResource($user);
+        return response()->json($userResource, Response::HTTP_CREATED);
     }
 }

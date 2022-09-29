@@ -4,7 +4,7 @@ namespace App\Http\Resources\User;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserBookResource extends JsonResource
+class BookResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,9 @@ class UserBookResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'book_id' => $this->book_id,
-            'book' => new BookResource($this->book),
-            'updated_by' => $this->updated_by,
-            'deleted_by' => $this->deleted_by,
+            'isbn' => $this->isbn,
+            'name' => $this->name,
+            'value' => $this->value,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
