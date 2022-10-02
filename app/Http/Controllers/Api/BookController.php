@@ -18,7 +18,7 @@ class BookController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        return $this->bookRepository->getBooks($request->all());
+        return $this->bookRepository->getBooks(15, $request->page);
     }
 
     public function store(BookRequest $bookRequest): JsonResponse

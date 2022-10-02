@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Http\Resources\Book\BookResource;
 use App\Interfaces\BookRepositoryInterface;
 use App\Models\Book;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class BookRepository implements BookRepositoryInterface
@@ -14,10 +15,9 @@ class BookRepository implements BookRepositoryInterface
     )
     {}
 
-    public function getBooks($request)
+    public function getBooks($total, $currentPage)
     {
-        $books = $this->book->with('userBook.user')->paginate(15);
-        return response()->json(BookResource::collection($books)->response()->getData(true), Response::HTTP_CREATED);
+        return $this->paginate($total, $currentPage);
     }
 
     public function addBooks(array $book)
@@ -105,6 +105,18 @@ class BookRepository implements BookRepositoryInterface
         catch (\Throwable $th){
             return response()->json(["message" => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+
+    protected function paginate(int $total, $currentPage)
+    {
+        $expiration = 60;
+        $key = 'book_'.$currentPage;
+
+        return Cache::remember($key, $expiration, function () use ($total) {
+            $books = $this->book->with('userBook.user')->paginate(15);
+            return response()->json(BookResource::collection($books)->response()->getData(true), Response::HTTP_CREATED);
+        });
     }
 
 

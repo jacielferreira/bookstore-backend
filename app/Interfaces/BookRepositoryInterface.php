@@ -5,7 +5,7 @@ namespace App\Interfaces;
 interface BookRepositoryInterface
 {
     public function addBooks(array $book);
-    public function getBooks($request);
+    public function getBooks($total, $currentPage);
     public function searchBook($bookName);
     public function updateBook($bookId, array $newDetail);
     public function restoreBook($bookId);
